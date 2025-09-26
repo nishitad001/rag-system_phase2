@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.envbk
+logs/
+scripts/run_batch.sh
+sudo-1.9.17p1/
+sudo-1.9.17p1.tar.gz

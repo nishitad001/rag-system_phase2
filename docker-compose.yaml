@@ -1,0 +1,35 @@
+version: '3.4'
+services:
+  weaviate_anon:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.27.4
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    restart: on-failure
+    command:
+      - --host
+      - 0.0.0.0
+      - --port
+      - '8080'
+      - --scheme
+      - http
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      DEFAULT_VECTORIZER_MODULE: 'none'        # ← ここをnoneに
+      ENABLE_MODULES: ''                       # ← 空 or 行自体を削除
+      BACKUP_FILESYSTEM_PATH: '/var/lib/weaviate/backups'
+      CLUSTER_HOSTNAME: 'node1'
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+
+  weaviate_ui:
+    image: naaive/weaviate-ui
+    ports:
+      - "3000:7777"
+    environment:
+      WEAVIATE_URL: "http://weaviate_anon:8080"
+
+volumes:
+  weaviate_data:
